@@ -1,0 +1,103 @@
+.sidebar {
+  width: var(--sidebar-default-width);
+  min-width: var(--sidebar-min-width);
+  max-width: var(--sidebar-max-width);
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-surface);
+}
+
+.sidebar-title {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink);
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Accordion sections */
+.accordion-section {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--space-4);
+  background-color: #faf9f9;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--ink-soft);
+  transition: background-color 0.15s ease;
+  user-select: none;
+}
+
+.accordion-header:hover {
+  background-color: var(--bg-app);
+}
+
+.accordion-header .chevron {
+  transition: transform 0.2s ease;
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+}
+
+.accordion-section.open .accordion-header .chevron {
+  transform: rotate(180deg);
+}
+
+.accordion-body {
+  display: none;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--bg-surface);
+}
+
+.accordion-section.open .accordion-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Form layout within sidebar */
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.form-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+

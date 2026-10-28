@@ -1,0 +1,28 @@
+.splitter-h {
+  width: var(--splitter-size);
+  background-color: var(--border);
+  cursor: col-resize;
+  transition: background-color 0.15s;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.splitter-h:hover,
+.splitter-h.active {
+  background-color: var(--accent);
+}
+
+.splitter-v {
+  height: var(--splitter-size);
+  background-color: var(--border);
+  cursor: row-resize;
+  transition: background-color 0.15s;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.splitter-v:hover,
+.splitter-v.active {
+  background-color: var(--accent);
+}
+

@@ -1,0 +1,65 @@
+:root {
+  /* Primarios (claros) */
+  --bg-app: #f5f3f4;
+  --bg-surface: #ffffff;
+  --bg-subtle: #eceae8;
+  --border: #d3d3d3;
+  --border-subtle: #e5e5e5;
+  --text-muted: #b1a7a6;
+  --text-secondary: #5e5a59;
+
+  /* Secundarios (oscuros) */
+  --ink: #0b090a;
+  --ink-soft: #161a1d;
+  --ink-surface: #22262a;
+  --ink-border: #31373d;
+  --ink-hover: #2b3137;
+  --text-inverse: #f5f3f4;
+
+  /* Acento (rojos) - Reservado para acciones principales, selección y foco */
+  --accent-deep: #660708;
+  --accent: #a4161a;
+  --accent-hover: #ba181b;
+  --accent-bright: #e5383b;
+  --accent-subtle: rgba(164, 22, 26, 0.08);
+  --accent-glow: rgba(164, 22, 26, 0.25);
+
+  /* Tipografía */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Code", "Fira Code", Consolas, "Courier New", monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 13px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+
+  /* Espaciado */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  /* Radios */
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+
+  /* Elevaciones / Sombras */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+  /* Dimensiones del Shell */
+  --menubar-height: 34px;
+  --statusbar-height: 26px;
+  --sidebar-default-width: 330px;
+  --sidebar-min-width: 260px;
+  --sidebar-max-width: 480px;
+  --matrix-min-height: 140px;
+  --editor-min-height: 200px;
+  --splitter-size: 5px;
+}
+

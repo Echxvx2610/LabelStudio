@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "name": "Etiqueta equipo",
+  "label": {
+    "width": 50,
+    "height": 30,
+    "unit": "mm",
+    "radius": 1
+  },
+  "elements": [
+    {
+      "id": "e1",
+      "type": "text",
+      "x": 3,
+      "y": 4,
+      "w": 30,
+      "h": 6,
+      "content": "{{prefijo}}-{{serial}}",
+      "font": "Inter",
+      "size": 11,
+      "bold": true
+    },
+    {
+      "id": "e2",
+      "type": "qr",
+      "x": 34,
+      "y": 3,
+      "w": 14,
+      "h": 14,
+      "content": "{{serial}}"
+    },
+    {
+      "id": "e3",
+      "type": "text",
+      "x": 3,
+      "y": 22,
+      "w": 30,
+      "h": 5,
+      "content": "{{fecha:DD/MM/YYYY}}",
+      "font": "Inter",
+      "size": 8,
+      "bold": false
+    }
+  ],
+  "serial": {
+    "prefix": "EQ-",
+    "start": 1,
+    "step": 1,
+    "padding": 4,
+    "suffix": "",
+    "base": "dec"
+  },
+  "sheet": {
+    "page": "A4",
+    "cols": 3,
+    "rows": 8,
+    "marginTop": 10,
+    "marginLeft": 5,
+    "gapX": 2,
+    "gapY": 2,
+    "startAt": 1
+  }
+}
+

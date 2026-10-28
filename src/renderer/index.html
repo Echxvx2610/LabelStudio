@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Label Studio</title>
+  
+  <!-- Estilos base y tokens -->
+  <link rel="stylesheet" href="./styles/tokens.css">
+  <link rel="stylesheet" href="./styles/base.css">
+  
+  <!-- Componentes del Sistema de Diseño -->
+  <link rel="stylesheet" href="./styles/components/menubar.css">
+  <link rel="stylesheet" href="./styles/components/sidebar.css">
+  <link rel="stylesheet" href="./styles/components/inputs.css">
+  <link rel="stylesheet" href="./styles/components/buttons.css">
+  <link rel="stylesheet" href="./styles/components/splitters.css">
+  <link rel="stylesheet" href="./styles/components/modal.css">
+  <link rel="stylesheet" href="./styles/components/editor-area.css">
+  <link rel="stylesheet" href="./styles/components/matrix-area.css">
+  <link rel="stylesheet" href="./styles/components/statusbar.css">
+
+  <style>
+    /* Estilos adicionales para notificaciones y preview */
+    .toast-container {
+      position: fixed;
+      bottom: 36px;
+      right: 20px;
+      background-color: var(--ink-surface);
+      color: var(--text-inverse);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--accent);
+      font-size: var(--font-size-xs);
+      box-shadow: var(--shadow-md);
+      z-index: 1500;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .toast-container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .badge-var {
+      background-color: #f0eeef;
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- 1. BARRA DE MENÚ SUPERIOR -->
+    <header class="menubar">
+      <div class="menubar-left" style="display: flex; align-items: center;">
+        <div class="menubar-brand">
+          <span>LABEL STUDIO</span>
+          <span class="brand-badge">PRO</span>
+        </div>
+        <nav class="menu-items">
+          <!-- Archivo -->
+          <div class="menu-item">
+            <button class="menu-btn">Archivo</button>
+            <div class="menu-dropdown">
+              <div class="menu-dropdown-item" data-action="new">
+                <span>Nuevo</span><span class="menu-shortcut">Ctrl+N</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="open">
+                <span>Abrir...</span><span class="menu-shortcut">Ctrl+O</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="save">
+                <span>Guardar</span><span class="menu-shortcut">Ctrl+S</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="save-as">
+                <span>Guardar como...</span><span class="menu-shortcut">Ctrl+Shift+S</span>
+              </div>
+              <div class="menu-divider"></div>
+              <div class="menu-dropdown-item" data-action="import-data">
+                <span>Importar datos (CSV/Excel)...</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="export">
+                <span>Exportar (PDF / PNG / SVG)...</span>
+              </div>
+              <div class="menu-divider"></div>
+              <div class="menu-dropdown-item" data-action="exit">
+                <span>Salir</span><span class="menu-shortcut">Alt+F4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Editar -->
+          <div class="menu-item">
+            <button class="menu-btn">Editar</button>
+            <div class="menu-dropdown">
+              <div class="menu-dropdown-item" data-action="undo">
+                <span>Deshacer</span><span class="menu-shortcut">Ctrl+Z</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="redo">
+                <span>Rehacer</span><span class="menu-shortcut">Ctrl+Y</span>
+              </div>
+              <div class="menu-divider"></div>
+              <div class="menu-dropdown-item" data-action="copy">
+                <span>Copiar</span><span class="menu-shortcut">Ctrl+C</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="paste">
+                <span>Pegar</span><span class="menu-shortcut">Ctrl+V</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="duplicate">
+                <span>Duplicar</span><span class="menu-shortcut">Ctrl+D</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="delete">
+                <span>Eliminar</span><span class="menu-shortcut">Supr</span>
+              </div>
+              <div class="menu-divider"></div>
+              <div class="menu-dropdown-item" data-action="select-all">
+                <span>Seleccionar todo</span><span class="menu-shortcut">Ctrl+A</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Insertar -->
+          <div class="menu-item">
+            <button class="menu-btn">Insertar</button>
+            <div class="menu-dropdown">
+              <div class="menu-dropdown-item" data-action="insert-text"><span>Texto</span></div>
+              <div class="menu-dropdown-item" data-action="insert-qr"><span>Código QR</span></div>
+              <div class="menu-dropdown-item" data-action="insert-barcode"><span>Código de barras</span></div>
+              <div class="menu-dropdown-item" data-action="insert-image"><span>Imagen / Logo</span></div>
+              <div class="menu-dropdown-item" data-action="insert-rect"><span>Rectángulo</span></div>
+              <div class="menu-dropdown-item" data-action="insert-line"><span>Línea</span></div>
+              <div class="menu-divider"></div>
+              <div class="menu-dropdown-item" data-action="insert-variable"><span>Campo variable</span></div>
+            </div>
+          </div>
+
+          <!-- Ver -->
+          <div class="menu-item">
+            <button class="menu-btn">Ver</button>
+            <div class="menu-dropdown">
+              <div class="menu-dropdown-item" data-action="zoom-in">
+                <span>Acercar</span><span class="menu-shortcut">Ctrl++</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="zoom-out">
+                <span>Alejar</span><span class="menu-shortcut">Ctrl+-</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="zoom-reset">
+                <span>Restablecer zoom</span><span class="menu-shortcut">Ctrl+0</span>
+              </div>
+              <div class="menu-divider"></div>
+              <div class="menu-dropdown-item" data-action="toggle-grid"><span>Cuadrícula</span></div>
+              <div class="menu-dropdown-item" data-action="toggle-rulers"><span>Reglas</span></div>
+              <div class="menu-dropdown-item" data-action="toggle-guides"><span>Guías magnéticas</span></div>
+            </div>
+          </div>
+
+          <!-- Impresión -->
+          <div class="menu-item">
+            <button class="menu-btn">Impresión</button>
+            <div class="menu-dropdown">
+              <div class="menu-dropdown-item" data-action="config-sheet"><span>Configurar matriz...</span></div>
+              <div class="menu-dropdown-item" data-action="preview">
+                <span>Vista previa</span><span class="menu-shortcut">Ctrl+P</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="print"><span>Imprimir directamente</span></div>
+              <div class="menu-divider"></div>
+              <div class="menu-dropdown-item" data-action="printers"><span>Gestionar impresoras</span></div>
+            </div>
+          </div>
+
+          <!-- Ayuda -->
+          <div class="menu-item">
+            <button class="menu-btn">Ayuda</button>
+            <div class="menu-dropdown">
+              <div class="menu-dropdown-item" data-action="shortcuts">
+                <span>Atajos de teclado</span><span class="menu-shortcut">F1</span>
+              </div>
+              <div class="menu-dropdown-item" data-action="about"><span>Acerca de Label Studio</span></div>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <div class="menubar-right">
+        <div class="status-badge">
+          <span class="status-dot" id="status-ipc-dot"></span>
+          <span id="status-ipc-text">Conectando IPC...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. WORKSPACE CONTENEDOR (Sidebar + Contenido principal) -->
+    <div class="workspace-container">
+      
+      <!-- SIDEBAR DE OPCIONES -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <span class="sidebar-title">Propiedades</span>
+          <button class="btn btn-icon" id="sidebar-collapse-btn" data-tooltip="Opciones">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="sidebar-content">
+          <!-- 1. SECCIÓN: ETIQUETA -->
+          <div class="accordion-section open">
+            <div class="accordion-header">
+              <span>Etiqueta</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="accordion-body">
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Plantilla</label>
+                  <select class="input-select" id="preset-selector">
+                    <option value="custom">Personalizada</option>
+                    <option value="eq-50x30" selected>Etiqueta Equipo (50×30 mm)</option>
+                    <option value="prod-70x37">Avery 70×37 mm</option>
+                    <option value="box-100x50">Caja / Envíos (100×50 mm)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Ancho</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="label-width" value="50" min="10" max="300" step="1">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Alto</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="label-height" value="30" min="10" max="300" step="1">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Radio esquinas</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="label-radius" value="1" min="0" max="20" step="0.5">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Orientación</label>
+                  <select class="input-select" id="label-orientation">
+                    <option value="landscape" selected>Horizontal</option>
+                    <option value="portrait">Vertical</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. SECCIÓN: ELEMENTO SELECCIONADO -->
+          <div class="accordion-section open">
+            <div class="accordion-header">
+              <span>Elemento Seleccionado</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="accordion-body">
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Posición X</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="elem-x" value="3" step="0.5">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Posición Y</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="elem-y" value="4" step="0.5">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Ancho (W)</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="elem-w" value="30" step="0.5">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Alto (H)</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="elem-h" value="6" step="0.5">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Rotación</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="elem-rot" value="0" min="0" max="360" step="90">
+                    <span class="input-unit-tag">°</span>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Alineación / Capas</label>
+                  <div class="toolbar-group" style="width: 100%; justify-content: space-around;">
+                    <button class="btn-icon" data-tooltip="Traer al frente">▲</button>
+                    <button class="btn-icon" data-tooltip="Enviar atrás">▼</button>
+                    <button class="btn-icon" data-tooltip="Centrar">⌖</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. SECCIÓN: DATOS Y VARIABLES -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <span>Datos y Variables</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="accordion-body">
+              <label class="form-label">Variables disponibles en la plantilla:</label>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <div><span class="badge-var">{{prefijo}}</span> <span style="font-size: 11px; color: var(--text-secondary);">Prefijo configurado</span></div>
+                <div><span class="badge-var">{{serial}}</span> <span style="font-size: 11px; color: var(--text-secondary);">Número correlativo autoincremental</span></div>
+                <div><span class="badge-var">{{fecha:DD/MM/YYYY}}</span> <span style="font-size: 11px; color: var(--text-secondary);">Fecha de impresión</span></div>
+              </div>
+              <button class="btn btn-secondary" style="margin-top: 4px;">
+                Importar CSV / Excel...
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. SECCIÓN: SERIALIZACIÓN -->
+          <div class="accordion-section open">
+            <div class="accordion-header">
+              <span>Serialización</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="accordion-body">
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Prefijo</label>
+                  <input type="text" class="input-text" id="serial-prefix" value="EQ-">
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Sufijo</label>
+                  <input type="text" class="input-text" id="serial-suffix" placeholder="(opcional)">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Inicio</label>
+                  <input type="number" class="input-text" id="serial-start" value="1" min="0">
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Paso (step)</label>
+                  <input type="number" class="input-text" id="serial-step" value="1">
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Padding</label>
+                  <input type="number" class="input-text" id="serial-padding" value="4" min="1" max="10">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Base numérica</label>
+                  <select class="input-select" id="serial-base">
+                    <option value="dec" selected>Decimal (0-9)</option>
+                    <option value="hex">Hexadecimal (0-F)</option>
+                    <option value="alpha">Alfabético (A-Z)</option>
+                  </select>
+                </div>
+              </div>
+              <div style="font-size: 11px; color: var(--text-secondary); background: #f0eeef; padding: 6px 8px; border-radius: var(--radius-sm);">
+                Ejemplo generado: <strong>EQ-0001, EQ-0002...</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. SECCIÓN: MATRIZ DE IMPRESIÓN -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <span>Matriz de Impresión</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="accordion-body">
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Formato de Página</label>
+                  <select class="input-select" id="sheet-page">
+                    <option value="A4" selected>A4 (210 × 297 mm)</option>
+                    <option value="Letter">Carta (216 × 279 mm)</option>
+                    <option value="Roll">Rollo continuo (Térmica)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Columnas</label>
+                  <input type="number" class="input-text" id="sheet-cols" value="3" min="1" max="10">
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Filas</label>
+                  <input type="number" class="input-text" id="sheet-rows" value="8" min="1" max="30">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Margen Superior</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="sheet-margin-top" value="10" min="0">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Margen Izquierdo</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="sheet-margin-left" value="5" min="0">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Separación X (Gap)</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="sheet-gap-x" value="2" min="0">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Separación Y (Gap)</label>
+                  <div class="input-unit-wrapper">
+                    <input type="number" id="sheet-gap-y" value="2" min="0">
+                    <span class="input-unit-tag">mm</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Iniciar en etiqueta #</label>
+                  <input type="number" class="input-text" id="sheet-start-at" value="1" min="1" max="24" data-tooltip="Permite reaprovechar hojas usadas">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. SECCIÓN: IMPRESIÓN DIRECTA -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <span>Impresión</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="accordion-body">
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Impresora</label>
+                  <select class="input-select" id="printer-select">
+                    <option value="virtual-pdf">Microsoft Print to PDF (Virtual)</option>
+                    <option value="default">Impresora predeterminada del sistema</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-col">
+                  <label class="form-label">Total de etiquetas</label>
+                  <input type="number" class="input-text" id="print-quantity" value="24" min="1">
+                </div>
+                <div class="form-col">
+                  <label class="form-label">Copias de hoja</label>
+                  <input type="number" class="input-text" id="print-copies" value="1" min="1">
+                </div>
+              </div>
+              <button class="btn btn-primary" id="btn-quick-print" style="width: 100%; margin-top: 6px;">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                  <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                Imprimir etiquetas
+              </button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- DIVISOR HORIZONTAL (SIDEBAR) -->
+      <div class="splitter-h" id="splitter-sidebar" title="Arrastra para redimensionar panel"></div>
+
+      <!-- CONTENIDO PRINCIPAL: ZONA DE EDICIÓN + ZONA DE MATRIZ -->
+      <main class="main-content">
+
+        <!-- 3. ZONA DE EDICIÓN EN VIVO (CANVAS SVG) -->
+        <section class="editor-zone" id="editor-zone">
+          <!-- Toolbar superior del editor -->
+          <div class="editor-toolbar">
+            <div class="toolbar-left">
+              <span class="toolbar-label">Herramientas:</span>
+              <div class="toolbar-group">
+                <button class="btn-icon active" data-tooltip="Seleccionar (V)">
+                  <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 2l16 11-7 1 4 8-3 1.5-4-8-6 4V2z"/>
+                  </svg>
+                </button>
+                <button class="btn-icon" data-insert="text" data-tooltip="Insertar Texto">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                    <line x1="9" y1="20" x2="15" y2="20"></line>
+                    <line x1="12" y1="4" x2="12" y2="20"></line>
+                  </svg>
+                </button>
+                <button class="btn-icon" data-insert="qr" data-tooltip="Insertar Código QR">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                  </svg>
+                </button>
+                <button class="btn-icon" data-insert="barcode" data-tooltip="Insertar Código de Barras">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="5" x2="3" y2="19"></line>
+                    <line x1="7" y1="5" x2="7" y2="19"></line>
+                    <line x1="11" y1="5" x2="11" y2="19"></line>
+                    <line x1="15" y1="5" x2="15" y2="19"></line>
+                    <line x1="18" y1="5" x2="18" y2="19"></line>
+                    <line x1="21" y1="5" x2="21" y2="19"></line>
+                  </svg>
+                </button>
+                <button class="btn-icon" data-insert="rect" data-tooltip="Insertar Rectángulo">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  </svg>
+                </button>
+                <button class="btn-icon" data-insert="line" data-tooltip="Insertar Línea">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="19" x2="19" y2="5"></line>
+                  </svg>
+                </button>
+                <button class="btn-icon" data-insert="image" data-tooltip="Insertar Imagen / Logo">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="toolbar-center">
+              <span style="font-size: 11px; color: var(--text-muted);">Lienzo SVG en milímetros (Escala 1:1)</span>
+            </div>
+
+            <div class="toolbar-right">
+              <div class="toolbar-group">
+                <button class="btn-icon" id="btn-zoom-out" data-tooltip="Alejar (Ctrl+-)">－</button>
+                <span id="zoom-percentage" style="font-size: 11px; font-weight: 600; padding: 0 4px; min-width: 38px; text-align: center;">100%</span>
+                <button class="btn-icon" id="btn-zoom-in" data-tooltip="Acercar (Ctrl++)">＋</button>
+                <button class="btn-icon" id="btn-zoom-reset" data-tooltip="100% (Ctrl+0)">1:1</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Viewport del lienzo SVG con la maqueta de etiqueta de referencia -->
+          <div class="canvas-viewport" id="canvas-viewport">
+            <div class="label-preview-container" id="label-preview-container" style="width: 320px; height: 192px;">
+              <!-- Lienzo SVG con viewBox en mm exactos (50 x 30 mm) -->
+              <svg 
+                id="label-svg" 
+                class="label-mock-svg" 
+                viewBox="0 0 50 30" 
+                width="100%" 
+                height="100%"
+                xmlns="http://www.w3.org/2000/svg">
+                <!-- Borde/Fondo de etiqueta -->
+                <rect x="0" y="0" width="50" height="30" rx="1" fill="#ffffff" stroke="#d3d3d3" stroke-width="0.3" />
+                
+                <!-- Elemento Texto 1: Prefijo + Serial -->
+                <g id="mock-e1" transform="translate(3, 8)">
+                  <text font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#0b090a">EQ-0001</text>
+                </g>
+
+                <!-- Elemento QR Mockup (34, 3, 14x14) -->
+                <g id="mock-e2" transform="translate(33, 3)">
+                  <rect width="14" height="14" fill="#ffffff" stroke="#0b090a" stroke-width="0.3" />
+                  <rect x="1.5" y="1.5" width="4" height="4" fill="#0b090a" />
+                  <rect x="8.5" y="1.5" width="4" height="4" fill="#0b090a" />
+                  <rect x="1.5" y="8.5" width="4" height="4" fill="#0b090a" />
+                  <rect x="6" y="6" width="2" height="2" fill="#0b090a" />
+                  <rect x="8.5" y="8.5" width="2.5" height="2.5" fill="#0b090a" />
+                </g>
+
+                <!-- Elemento Texto 2: Descripción -->
+                <g id="mock-e-desc" transform="translate(3, 15)">
+                  <text font-family="sans-serif" font-size="2" fill="#5e5a59">ACTIVO FIJO - BRUNSWICK</text>
+                </g>
+
+                <!-- Elemento Texto 3: Fecha -->
+                <g id="mock-e3" transform="translate(3, 25)">
+                  <text font-family="sans-serif" font-size="2.2" fill="#161a1d">28/10/2026</text>
+                </g>
+                
+                <!-- Bounding box de selección activa de prueba (rojo #a4161a según el sistema de diseño) -->
+                <rect x="2.5" y="4" width="28" height="5.5" fill="none" stroke="#a4161a" stroke-width="0.4" stroke-dasharray="1 0.5" />
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- DIVISOR VERTICAL (ZONA EDICIÓN / MATRIZ) -->
+        <div class="splitter-v" id="splitter-matrix" title="Arrastra para redimensionar vista de matriz"></div>
+
+        <!-- 4. ZONA DE MATRIZ DE IMPRESIÓN -->
+        <section class="matrix-zone" id="matrix-zone">
+          <div class="matrix-toolbar">
+            <div class="matrix-title">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="3" y1="15" x2="21" y2="15"></line>
+                <line x1="9" y1="3" x2="9" y2="21"></line>
+                <line x1="15" y1="3" x2="15" y2="21"></line>
+              </svg>
+              <span>Matriz de Impresión</span>
+              <span style="font-size: 11px; font-weight: normal; color: var(--text-secondary); margin-left: 8px;">
+                (Hoja A4: 3 cols × 8 rows = 24 etiquetas por hoja)
+              </span>
+            </div>
+
+            <div class="toolbar-right">
+              <span style="font-size: 11px; color: var(--text-muted); margin-right: 6px;">Página 1 de 1</span>
+              <div class="toolbar-group">
+                <button class="btn-icon" data-tooltip="Página anterior" disabled>◀</button>
+                <button class="btn-icon" data-tooltip="Página siguiente" disabled>▶</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Viewport de la matriz de impresión -->
+          <div class="matrix-viewport">
+            <div class="sheet-mock-preview" style="width: 280px; height: 180px; padding: 8px;">
+              <!-- Representación SVG a escala de la hoja con su cuadrícula de 3x8 -->
+              <svg viewBox="0 0 210 297" width="100%" height="100%" style="border: 1px solid var(--border); background: #ffffff;">
+                <defs>
+                  <pattern id="matrix-grid-pattern" width="65" height="34" patternUnits="userSpaceOnUse">
+                    <rect x="2" y="2" width="60" height="30" rx="1" fill="#fcfcfc" stroke="#d3d3d3" stroke-width="0.8" />
+                    <text x="5" y="10" font-family="sans-serif" font-size="4" fill="#a4161a">EQ-####</text>
+                  </pattern>
+                </defs>
+                <rect x="8" y="12" width="195" height="272" fill="url(#matrix-grid-pattern)" />
+              </svg>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- 5. BARRA DE ESTADO INFERIOR -->
+    <footer class="statusbar">
+      <div class="statusbar-left">
+        <div class="statusbar-item">
+          <span>Plantilla:</span>
+          <strong>Etiqueta equipo (50 × 30 mm)</strong>
+        </div>
+        <div class="statusbar-item">
+          <span>Cursor:</span>
+          <strong id="status-cursor">X: 0.0 mm, Y: 0.0 mm</strong>
+        </div>
+        <div class="statusbar-item">
+          <span>Modo:</span>
+          <strong>Edición vectorial</strong>
+        </div>
+      </div>
+
+      <div class="statusbar-right">
+        <div class="statusbar-item">
+          <span>Zoom:</span>
+          <strong id="status-zoom">100%</strong>
+        </div>
+        <div class="statusbar-item">
+          <span>Unidad:</span>
+          <strong>mm (Milímetros)</strong>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MODAL GENÉRICO -->
+    <div class="modal-backdrop" id="modal-backdrop">
+      <div class="modal-container">
+        <div class="modal-header">
+          <span class="modal-title" id="modal-title">Título</span>
+          <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          <!-- Contenido dinámico -->
+        </div>
+        <div class="modal-footer" id="modal-footer">
+          <!-- Botones dinámicos -->
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICACIÓN TOAST -->
+    <div class="toast-container" id="toast-notification">
+      Notificación
+    </div>
+
+  </div>
+
+  <!-- Script principal del cliente (ES Module) -->
+  <script type="module" src="./app/app.js"></script>
+</body>
+</html>
+

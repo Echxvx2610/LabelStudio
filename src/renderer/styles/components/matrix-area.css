@@ -1,0 +1,52 @@
+.matrix-zone {
+  display: flex;
+  flex-direction: column;
+  height: 260px;
+  min-height: var(--matrix-min-height);
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.matrix-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px var(--space-3);
+  background-color: #faf9f9;
+  border-bottom: 1px solid var(--border);
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.matrix-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.matrix-viewport {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  background-color: #eceae8;
+  padding: var(--space-3);
+}
+
+.sheet-mock-preview {
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+

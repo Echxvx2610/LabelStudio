@@ -1,0 +1,36 @@
+{
+  "name": "label-studio",
+  "version": "0.1.0",
+  "description": "Editor y generador de etiquetas de escritorio con seriales e impresion directa",
+  "private": true,
+  "type": "module",
+  "main": "src/main/index.js",
+  "scripts": {
+    "dev": "vite",
+    "dev:electron": "concurrently -k \"vite\" \"wait-on tcp:5173 && electron .\"",
+    "start": "electron .",
+    "build": "vite build",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "label",
+    "barcode",
+    "qr",
+    "electron",
+    "printing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "electron": "^34.2.0",
+    "eslint": "^9.21.0",
+    "prettier": "^3.5.2",
+    "vite": "^6.2.0",
+    "vitest": "^3.0.7",
+    "wait-on": "^8.0.2"
+  }
+}

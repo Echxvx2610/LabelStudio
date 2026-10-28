@@ -24,6 +24,10 @@ export class ShortcutManager {
     }
 
     if (key === '=') key = '+';
+    // En teclados US, "+" requiere Shift: no lo tratamos como modificador
+    if (key === '+' && parts.includes('Shift')) {
+      parts.splice(parts.indexOf('Shift'), 1);
+    }
     if (key.length === 1) {
       key = key.toUpperCase();
     }
@@ -57,8 +61,13 @@ export class ShortcutManager {
       const combo = this.normalizeKeyCombo(e);
       if (!combo) return;
 
-      // Esc always allowed
-      if (isInput && combo !== 'Escape' && !combo.startsWith('Ctrl+')) {
+      // Escritura en campos: solo se permiten atajos globales seguros (guardar/ayuda)
+      const inputAllowed =
+        combo === 'Escape' ||
+        combo === 'Ctrl+S' ||
+        combo === 'Ctrl+Shift+S' ||
+        combo === 'F1';
+      if (isInput && !inputAllowed) {
         return;
       }
 

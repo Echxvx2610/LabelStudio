@@ -33,30 +33,149 @@
   font-weight: 600;
 }
 
-.canvas-viewport {
+/* Área de lienzo: reglas + viewport desplazable */
+.canvas-area {
   flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  grid-template-rows: 18px minmax(0, 1fr);
+  background-color: #e5e5e5;
+}
+
+.canvas-area.no-rulers {
+  grid-template-columns: 0 minmax(0, 1fr);
+  grid-template-rows: 0 minmax(0, 1fr);
+}
+
+.canvas-area.no-rulers .ruler,
+.canvas-area.no-rulers .ruler-corner {
+  display: none;
+}
+
+.ruler-corner {
+  grid-area: 1 / 1;
+  background-color: #faf9f9;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.ruler {
+  display: block;
+  background-color: #faf9f9;
+}
+
+.ruler-horizontal {
+  grid-area: 1 / 2;
+  border-bottom: 1px solid var(--border);
+}
+
+.ruler-vertical {
+  grid-area: 2 / 1;
+  border-right: 1px solid var(--border);
+}
+
+.canvas-viewport {
+  grid-area: 2 / 2;
+  position: relative;
+  overflow: auto;
+  padding: 0;
+  background-color: #e5e5e5;
+  background-image: radial-gradient(circle, #c4c4c4 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.canvas-viewport.pan-ready {
+  cursor: grab;
+}
+
+.canvas-viewport.panning {
+  cursor: grabbing;
+}
+
+.canvas-stage {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  overflow: auto;
-  background-color: #e5e5e5;
-  background-image: 
-    radial-gradient(circle, #c4c4c4 1px, transparent 1px);
-  background-size: 16px 16px;
-  padding: var(--space-5);
 }
 
-/* Label mockup container in editor */
-.label-preview-container {
+.label-svg {
+  display: block;
+  flex: none;
   background-color: #ffffff;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
-  border-radius: 2px;
-  position: relative;
-  transition: transform 0.15s ease;
+  touch-action: none;
 }
 
-.label-mock-svg {
-  display: block;
+.label-svg #label-background {
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Elementos y selección */
+.label-svg .element {
+  cursor: move;
+}
+
+.label-svg .selection-outline {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.label-svg .selection-group {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+  stroke-opacity: 0.6;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.label-svg .selection-handle {
+  fill: #ffffff;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.label-svg .selection-handle:hover {
+  fill: var(--accent-subtle);
+}
+
+.label-svg .rotate-connector {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.label-svg .rotate-handle {
+  fill: #ffffff;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.label-svg .guide-line {
+  stroke: var(--accent-bright);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.label-svg .marquee {
+  fill: rgba(164, 22, 26, 0.08);
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
 }
 

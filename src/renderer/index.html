@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Label Studio</title>
-  
+
   <!-- Estilos base y tokens -->
   <link rel="stylesheet" href="./styles/tokens.css">
   <link rel="stylesheet" href="./styles/base.css">
-  
+
   <!-- Componentes del Sistema de Diseño -->
   <link rel="stylesheet" href="./styles/components/menubar.css">
   <link rel="stylesheet" href="./styles/components/sidebar.css">
@@ -39,10 +40,12 @@
       pointer-events: none;
       transition: opacity 0.2s, transform 0.2s;
     }
+
     .toast-container.visible {
       opacity: 1;
       transform: translateY(0);
     }
+
     .badge-var {
       background-color: #f0eeef;
       color: var(--accent);
@@ -55,6 +58,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="app">
     <!-- 1. BARRA DE MENÚ SUPERIOR -->
@@ -62,7 +66,6 @@
       <div class="menubar-left" style="display: flex; align-items: center;">
         <div class="menubar-brand">
           <span>LABEL STUDIO</span>
-          <span class="brand-badge">PRO</span>
         </div>
         <nav class="menu-items">
           <!-- Archivo -->
@@ -197,7 +200,7 @@
 
     <!-- 2. WORKSPACE CONTENEDOR (Sidebar + Contenido principal) -->
     <div class="workspace-container">
-      
+
       <!-- SIDEBAR DE OPCIONES -->
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -317,11 +320,41 @@
                 <div class="form-col">
                   <label class="form-label">Alineación / Capas</label>
                   <div class="toolbar-group" style="width: 100%; justify-content: space-around;">
-                    <button class="btn-icon" data-tooltip="Traer al frente">▲</button>
-                    <button class="btn-icon" data-tooltip="Enviar atrás">▼</button>
-                    <button class="btn-icon" data-tooltip="Centrar">⌖</button>
+                    <button class="btn-icon" id="btn-layer-front" data-tooltip="Traer al frente">▲</button>
+                    <button class="btn-icon" id="btn-layer-back" data-tooltip="Enviar atrás">▼</button>
+                    <button class="btn-icon" id="btn-center" data-tooltip="Centrar en la etiqueta">⌖</button>
                   </div>
                 </div>
+              </div>
+
+              <!-- Propiedades específicas del tipo de elemento (Fase 4) -->
+              <div id="element-props" class="element-props"></div>
+            </div>
+          </div>
+
+          <!-- 2b. SECCIÓN: ALINEAR Y DISTRIBUIR -->
+          <div class="accordion-section">
+            <div class="accordion-header">
+              <span>Alinear y Distribuir</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            <div class="accordion-body">
+              <label class="form-label">Alinear selección</label>
+              <div class="align-grid">
+                <button class="btn btn-secondary" data-align="left" data-tooltip="Alinear a la izquierda">⇤</button>
+                <button class="btn btn-secondary" data-align="center-h"
+                  data-tooltip="Centrar horizontalmente">↔</button>
+                <button class="btn btn-secondary" data-align="right" data-tooltip="Alinear a la derecha">⇥</button>
+                <button class="btn btn-secondary" data-align="top" data-tooltip="Alinear arriba">⇧</button>
+                <button class="btn btn-secondary" data-align="center-v" data-tooltip="Centrar verticalmente">↕</button>
+                <button class="btn btn-secondary" data-align="bottom" data-tooltip="Alinear abajo">⇩</button>
+              </div>
+              <label class="form-label">Distribuir (3+ elementos)</label>
+              <div class="form-row">
+                <button class="btn btn-secondary" data-distribute="x" style="flex: 1;">Horizontal</button>
+                <button class="btn btn-secondary" data-distribute="y" style="flex: 1;">Vertical</button>
               </div>
             </div>
           </div>
@@ -337,9 +370,13 @@
             <div class="accordion-body">
               <label class="form-label">Variables disponibles en la plantilla:</label>
               <div style="display: flex; flex-direction: column; gap: 6px;">
-                <div><span class="badge-var">{{prefijo}}</span> <span style="font-size: 11px; color: var(--text-secondary);">Prefijo configurado</span></div>
-                <div><span class="badge-var">{{serial}}</span> <span style="font-size: 11px; color: var(--text-secondary);">Número correlativo autoincremental</span></div>
-                <div><span class="badge-var">{{fecha:DD/MM/YYYY}}</span> <span style="font-size: 11px; color: var(--text-secondary);">Fecha de impresión</span></div>
+                <div><span class="badge-var">{{prefijo}}</span> <span
+                    style="font-size: 11px; color: var(--text-secondary);">Prefijo configurado</span></div>
+                <div><span class="badge-var">{{serial}}</span> <span
+                    style="font-size: 11px; color: var(--text-secondary);">Número correlativo autoincremental</span>
+                </div>
+                <div><span class="badge-var">{{fecha:DD/MM/YYYY}}</span> <span
+                    style="font-size: 11px; color: var(--text-secondary);">Fecha de impresión</span></div>
               </div>
               <button class="btn btn-secondary" style="margin-top: 4px;">
                 Importar CSV / Excel...
@@ -390,7 +427,8 @@
                   </select>
                 </div>
               </div>
-              <div style="font-size: 11px; color: var(--text-secondary); background: #f0eeef; padding: 6px 8px; border-radius: var(--radius-sm);">
+              <div
+                style="font-size: 11px; color: var(--text-secondary); background: #f0eeef; padding: 6px 8px; border-radius: var(--radius-sm);">
                 Ejemplo generado: <strong>EQ-0001, EQ-0002...</strong>
               </div>
             </div>
@@ -460,7 +498,8 @@
               <div class="form-row">
                 <div class="form-col">
                   <label class="form-label">Iniciar en etiqueta #</label>
-                  <input type="number" class="input-text" id="sheet-start-at" value="1" min="1" max="24" data-tooltip="Permite reaprovechar hojas usadas">
+                  <input type="number" class="input-text" id="sheet-start-at" value="1" min="1" max="24"
+                    data-tooltip="Permite reaprovechar hojas usadas">
                 </div>
               </div>
             </div>
@@ -518,11 +557,15 @@
           <!-- Toolbar superior del editor -->
           <div class="editor-toolbar">
             <div class="toolbar-left">
+              <div class="toolbar-group">
+                <button class="btn-icon" id="btn-undo" data-tooltip="Deshacer (Ctrl+Z)" disabled>↶</button>
+                <button class="btn-icon" id="btn-redo" data-tooltip="Rehacer (Ctrl+Y)" disabled>↷</button>
+              </div>
               <span class="toolbar-label">Herramientas:</span>
               <div class="toolbar-group">
-                <button class="btn-icon active" data-tooltip="Seleccionar (V)">
+                <button class="btn-icon active" id="tool-select" data-tooltip="Seleccionar (V)">
                   <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M4 2l16 11-7 1 4 8-3 1.5-4-8-6 4V2z"/>
+                    <path d="M4 2l16 11-7 1 4 8-3 1.5-4-8-6 4V2z" />
                   </svg>
                 </button>
                 <button class="btn-icon" data-insert="text" data-tooltip="Insertar Texto">
@@ -555,6 +598,11 @@
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                   </svg>
                 </button>
+                <button class="btn-icon" data-insert="ellipse" data-tooltip="Insertar Elipse">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <ellipse cx="12" cy="12" rx="9" ry="6"></ellipse>
+                  </svg>
+                </button>
                 <button class="btn-icon" data-insert="line" data-tooltip="Insertar Línea">
                   <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="5" y1="19" x2="19" y2="5"></line>
@@ -571,61 +619,40 @@
             </div>
 
             <div class="toolbar-center">
-              <span style="font-size: 11px; color: var(--text-muted);">Lienzo SVG en milímetros (Escala 1:1)</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Lienzo SVG en milímetros · Ctrl+rueda para zoom ·
+                Espacio+arrastrar para mover</span>
             </div>
 
             <div class="toolbar-right">
               <div class="toolbar-group">
                 <button class="btn-icon" id="btn-zoom-out" data-tooltip="Alejar (Ctrl+-)">－</button>
-                <span id="zoom-percentage" style="font-size: 11px; font-weight: 600; padding: 0 4px; min-width: 38px; text-align: center;">100%</span>
+                <span id="zoom-percentage"
+                  style="font-size: 11px; font-weight: 600; padding: 0 4px; min-width: 38px; text-align: center;">100%</span>
                 <button class="btn-icon" id="btn-zoom-in" data-tooltip="Acercar (Ctrl++)">＋</button>
                 <button class="btn-icon" id="btn-zoom-reset" data-tooltip="100% (Ctrl+0)">1:1</button>
+                <button class="btn-icon" id="btn-zoom-fit" data-tooltip="Ajustar a la ventana">⤢</button>
               </div>
             </div>
           </div>
 
-          <!-- Viewport del lienzo SVG con la maqueta de etiqueta de referencia -->
-          <div class="canvas-viewport" id="canvas-viewport">
-            <div class="label-preview-container" id="label-preview-container" style="width: 320px; height: 192px;">
-              <!-- Lienzo SVG con viewBox en mm exactos (50 x 30 mm) -->
-              <svg 
-                id="label-svg" 
-                class="label-mock-svg" 
-                viewBox="0 0 50 30" 
-                width="100%" 
-                height="100%"
-                xmlns="http://www.w3.org/2000/svg">
-                <!-- Borde/Fondo de etiqueta -->
-                <rect x="0" y="0" width="50" height="30" rx="1" fill="#ffffff" stroke="#d3d3d3" stroke-width="0.3" />
-                
-                <!-- Elemento Texto 1: Prefijo + Serial -->
-                <g id="mock-e1" transform="translate(3, 8)">
-                  <text font-family="sans-serif" font-size="3.5" font-weight="bold" fill="#0b090a">EQ-0001</text>
-                </g>
+          <!-- Área de lienzo con reglas y viewport desplazable -->
+          <div class="canvas-area" id="canvas-area">
+            <div class="ruler-corner"></div>
+            <svg class="ruler ruler-horizontal" id="ruler-h" aria-hidden="true"></svg>
+            <svg class="ruler ruler-vertical" id="ruler-v" aria-hidden="true"></svg>
 
-                <!-- Elemento QR Mockup (34, 3, 14x14) -->
-                <g id="mock-e2" transform="translate(33, 3)">
-                  <rect width="14" height="14" fill="#ffffff" stroke="#0b090a" stroke-width="0.3" />
-                  <rect x="1.5" y="1.5" width="4" height="4" fill="#0b090a" />
-                  <rect x="8.5" y="1.5" width="4" height="4" fill="#0b090a" />
-                  <rect x="1.5" y="8.5" width="4" height="4" fill="#0b090a" />
-                  <rect x="6" y="6" width="2" height="2" fill="#0b090a" />
-                  <rect x="8.5" y="8.5" width="2.5" height="2.5" fill="#0b090a" />
-                </g>
-
-                <!-- Elemento Texto 2: Descripción -->
-                <g id="mock-e-desc" transform="translate(3, 15)">
-                  <text font-family="sans-serif" font-size="2" fill="#5e5a59">ACTIVO FIJO - BRUNSWICK</text>
-                </g>
-
-                <!-- Elemento Texto 3: Fecha -->
-                <g id="mock-e3" transform="translate(3, 25)">
-                  <text font-family="sans-serif" font-size="2.2" fill="#161a1d">28/10/2026</text>
-                </g>
-                
-                <!-- Bounding box de selección activa de prueba (rojo #a4161a según el sistema de diseño) -->
-                <rect x="2.5" y="4" width="28" height="5.5" fill="none" stroke="#a4161a" stroke-width="0.4" stroke-dasharray="1 0.5" />
-              </svg>
+            <div class="canvas-viewport" id="canvas-viewport">
+              <div class="canvas-stage" id="canvas-stage">
+                <!-- Lienzo SVG con viewBox en mm exactos; el contenido lo genera el editor -->
+                <svg id="label-svg" class="label-svg" viewBox="0 0 50 30" xmlns="http://www.w3.org/2000/svg">
+                  <defs id="svg-defs"></defs>
+                  <rect id="label-background" x="0" y="0" width="50" height="30" rx="1" fill="#ffffff" stroke="#d3d3d3"
+                    stroke-width="0.3" />
+                  <g id="layer-grid"></g>
+                  <g id="layer-elements"></g>
+                  <g id="layer-overlay"></g>
+                </svg>
+              </div>
             </div>
           </div>
         </section>
@@ -663,10 +690,12 @@
           <div class="matrix-viewport">
             <div class="sheet-mock-preview" style="width: 280px; height: 180px; padding: 8px;">
               <!-- Representación SVG a escala de la hoja con su cuadrícula de 3x8 -->
-              <svg viewBox="0 0 210 297" width="100%" height="100%" style="border: 1px solid var(--border); background: #ffffff;">
+              <svg viewBox="0 0 210 297" width="100%" height="100%"
+                style="border: 1px solid var(--border); background: #ffffff;">
                 <defs>
                   <pattern id="matrix-grid-pattern" width="65" height="34" patternUnits="userSpaceOnUse">
-                    <rect x="2" y="2" width="60" height="30" rx="1" fill="#fcfcfc" stroke="#d3d3d3" stroke-width="0.8" />
+                    <rect x="2" y="2" width="60" height="30" rx="1" fill="#fcfcfc" stroke="#d3d3d3"
+                      stroke-width="0.8" />
                     <text x="5" y="10" font-family="sans-serif" font-size="4" fill="#a4161a">EQ-####</text>
                   </pattern>
                 </defs>
@@ -684,7 +713,7 @@
       <div class="statusbar-left">
         <div class="statusbar-item">
           <span>Plantilla:</span>
-          <strong>Etiqueta equipo (50 × 30 mm)</strong>
+          <strong id="status-template">Etiqueta equipo (50 × 30 mm)</strong>
         </div>
         <div class="statusbar-item">
           <span>Cursor:</span>
@@ -734,5 +763,5 @@
   <!-- Script principal del cliente (ES Module) -->
   <script type="module" src="./app/app.js"></script>
 </body>
-</html>
 
+</html>

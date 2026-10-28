@@ -180,18 +180,18 @@ Criterio de uso: fondo `#f5f3f4`, paneles `#ffffff`, bordes `#d3d3d3`, texto `#0
 
 **Duración:** 5-7 días (la fase más pesada)
 
-- [ ] Lienzo SVG con `viewBox` en mm
-- [ ] Zoom (rueda + Ctrl) y desplazamiento
-- [ ] Reglas y cuadrícula
-- [ ] Snap a cuadrícula, bordes y otros elementos
-- [ ] Selección: clic, múltiple (Shift), caja de selección
-- [ ] Manejadores de redimensión y rotación
-- [ ] Mover con ratón y con flechas (Shift = paso mayor)
-- [ ] Historial undo/redo (snapshots del JSON)
-- [ ] Panel de propiedades sincronizado con el elemento seleccionado (X, Y, ancho, alto, rotación)
-- [ ] Orden de capas (traer al frente / enviar atrás)
-- [ ] Alinear y distribuir
-- [ ] Configuración de etiqueta: presets + tamaño personalizado, orientación, radio de esquinas
+- [x] Lienzo SVG con `viewBox` en mm
+- [x] Zoom (rueda + Ctrl) y desplazamiento
+- [x] Reglas y cuadrícula
+- [x] Snap a cuadrícula, bordes y otros elementos
+- [x] Selección: clic, múltiple (Shift), caja de selección
+- [x] Manejadores de redimensión y rotación
+- [x] Mover con ratón y con flechas (Shift = paso mayor)
+- [x] Historial undo/redo (snapshots del JSON)
+- [x] Panel de propiedades sincronizado con el elemento seleccionado (X, Y, ancho, alto, rotación)
+- [x] Orden de capas (traer al frente / enviar atrás)
+- [x] Alinear y distribuir
+- [x] Configuración de etiqueta: presets + tamaño personalizado, orientación, radio de esquinas
 
 **Entregable:** crear una etiqueta con rectángulos y moverlos con precisión.
 
@@ -201,14 +201,14 @@ Criterio de uso: fondo `#f5f3f4`, paneles `#ffffff`, bordes `#d3d3d3`, texto `#0
 
 **Duración:** 4-5 días
 
-- [ ] **Texto:** fuente, tamaño (pt), negrita/cursiva, alineación, interlineado, multilínea, ajuste automático a la caja
-- [ ] Empaquetar 2-3 fuentes locales (impresión idéntica en cualquier equipo)
-- [ ] **QR:** nivel de corrección de errores, margen (quiet zone), contenido con variables
-- [ ] **Códigos de barras:** Code128, Code39, EAN-13, ITF, DataMatrix; opción de texto legible
-- [ ] **Imagen / logo:** PNG/JPG/SVG embebido en base64 dentro de la plantilla
-- [ ] **Formas:** línea, rectángulo, elipse (borde y relleno)
-- [ ] Validación de contenido según simbología (ej. EAN-13 solo numérico)
-- [ ] Aviso cuando un código queda demasiado pequeño para leerse
+- [x] **Texto:** fuente, tamaño (pt), negrita/cursiva, alineación, interlineado, multilínea, ajuste automático a la caja
+- [x] Empaquetar 2-3 fuentes locales (impresión idéntica en cualquier equipo)
+- [x] **QR:** nivel de corrección de errores, margen (quiet zone), contenido con variables
+- [x] **Códigos de barras:** Code128, Code39, EAN-13, ITF, DataMatrix; opción de texto legible
+- [x] **Imagen / logo:** PNG/JPG/SVG embebido en base64 dentro de la plantilla
+- [x] **Formas:** línea, rectángulo, elipse (borde y relleno)
+- [x] Validación de contenido según simbología (ej. EAN-13 solo numérico)
+- [x] Aviso cuando un código queda demasiado pequeño para leerse
 
 **Entregable:** reproducir al menos una etiqueta real de referencia.
 
